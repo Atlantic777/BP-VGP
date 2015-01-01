@@ -10,7 +10,7 @@ typedef struct {
     int (*function)();
 } menu_item;
 
-menu_item menu_items_arr[4];
+menu_item menu_items_arr[NUM_MENU_ITEMS];
 
 void print_menu();
 void init_menu();

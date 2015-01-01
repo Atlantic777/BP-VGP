@@ -1,6 +1,7 @@
 #include "db_functions.h"
 #include <stdio.h>
 #include <string.h>
+#include "db_file.h"
 
 #define ROOT_DIR "/tmp/"
 
@@ -11,43 +12,50 @@ int exit_program()
 
 int create_new_file()
 {
-    char filename[30];
     puts("Kreiranje nove datoteke");
     puts("=======================");
-    printf("Naziv datoteke: "); scanf("%s", filename);
+    printf("Naziv datoteke: "); scanf("%s", dbf->filename);
 
     char path[50];
     strcpy(path, ROOT_DIR);
-    strcpy(path+strlen(ROOT_DIR), filename);
+    strcpy(path+strlen(ROOT_DIR), dbf->filename);
 
-    FILE *f = fopen(path, "w+");
-    fclose(f);
+    dbf->file = fopen(path, "w+");
+    fclose(dbf->file);
 
     return 0;
 }
 
 int choose_file()
 {
-    char filename[30];
     puts("Otvaranje datoteke");
     puts("==================");
-    printf("Naziv datoteke: "); scanf("%s", filename);
+    printf("Naziv datoteke: "); scanf("%s", dbf->filename);
 
     char path[50];
     strcpy(path, ROOT_DIR);
-    strcpy(path+strlen(ROOT_DIR), filename);
+    strcpy(path+strlen(ROOT_DIR), dbf->filename);
 
-    FILE *f = fopen(path, "w+");
-    fclose(f);
+    dbf->file = fopen(path, "w+");
+    fclose(dbf->file);
 
     return 0;
 }
 
 int show_filename()
 {
+    if(dbf->file == NULL)
+        puts("Nije otvorena ni jedna datoteka");
+    else
+        puts(dbf->filename);
+
     return 0;
 }
 
 int create_serial_file()
 {
+    // Proveri da li je otvorena datoteka
+    // Petlja za dodavanje sloga
+
+    // TODO dodati funkciju za upis jednog sloga
 }
