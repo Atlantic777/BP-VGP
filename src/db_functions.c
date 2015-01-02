@@ -16,11 +16,10 @@ int create_new_file()
     puts("=======================");
     printf("Naziv datoteke: "); scanf("%s", dbf->filename);
 
-    char path[50];
-    strcpy(path, ROOT_DIR);
-    strcpy(path+strlen(ROOT_DIR), dbf->filename);
+    strcpy(dbf->path, ROOT_DIR);
+    strcpy(dbf->path+strlen(ROOT_DIR), dbf->filename);
 
-    dbf->file = fopen(path, "w+");
+    dbf->file = fopen(dbf->path, "w+");
     fclose(dbf->file);
 
     return 0;
@@ -32,12 +31,10 @@ int choose_file()
     puts("==================");
     printf("Naziv datoteke: "); scanf("%s", dbf->filename);
 
-    char path[50];
-    strcpy(path, ROOT_DIR);
-    strcpy(path+strlen(ROOT_DIR), dbf->filename);
+    strcpy(dbf->path, ROOT_DIR);
+    strcpy(dbf->path+strlen(ROOT_DIR), dbf->filename);
 
-    dbf->file = fopen(path, "w+");
-    fclose(dbf->file);
+    dbf->file = fopen(dbf->path, "w+");
 
     return 0;
 }
