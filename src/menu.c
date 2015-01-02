@@ -1,5 +1,5 @@
 #include "menu.h"
-#include "db_functions.h"
+#include "cli_functions.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -27,11 +27,11 @@ void init_menu()
         };
 
     void *menu_item_functions[NUM_MENU_ITEMS] = {
-            exit_program,
-            create_new_file,
-            choose_file,
-            show_filename,
-            create_serial_file,
+            cli_exit_program,
+            cli_create_new_file,
+            cli_choose_file,
+            cli_show_filename,
+            cli_create_serial_file,
         };
 
     int i;

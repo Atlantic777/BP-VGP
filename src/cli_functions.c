@@ -1,4 +1,4 @@
-#include "db_functions.h"
+#include "cli_functions.h"
 #include <stdio.h>
 #include <string.h>
 #include "db_file.h"
@@ -7,12 +7,12 @@
 
 #define ROOT_DIR "/tmp/"
 
-int exit_program()
+int cli_exit_program()
 {
     return 0;
 }
 
-int create_new_file()
+int cli_create_new_file()
 {
     puts("Kreiranje nove datoteke");
     puts("=======================");
@@ -56,7 +56,7 @@ int do_next_entry()
     return ans%2;
 }
 
-int choose_file()
+int cli_choose_file()
 {
     puts("Otvaranje datoteke");
     puts("==================");
@@ -70,7 +70,7 @@ int choose_file()
     return 0;
 }
 
-int show_filename()
+int cli_show_filename()
 {
     if(dbf->file == NULL)
         puts("Nije otvorena ni jedna datoteka");
@@ -80,7 +80,7 @@ int show_filename()
     return 0;
 }
 
-int create_serial_file()
+int cli_create_serial_file()
 {
     if( dbf->file == NULL)
     {
