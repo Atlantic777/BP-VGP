@@ -1,5 +1,5 @@
-#ifndef DB_FUNCTIONS_H
-#define DB_FUNCTIONS_H
+#ifndef CLI_FUNCTIONS_H
+#define CLI_FUNCTIONS_H
 
 int cli_exit_program();
 int cli_create_new_file();
