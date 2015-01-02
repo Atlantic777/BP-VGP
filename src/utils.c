@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include <stdlib.h>
 
 int str_digit(char *s, int len)
 {
@@ -136,4 +137,22 @@ int get_boravak(long *boravak)
         *boravak = tmp;
         return 1;
     }
+}
+
+void vgp_sort(vgp_parkiranje *arr, int len)
+{
+    qsort( arr, len, sizeof(vgp_parkiranje), compare_vgp_entries);
+}
+
+int compare_vgp_entries(const void* first, const void* second)
+{
+    int a = atoi( ((vgp_parkiranje*)first)->e_br);
+    int b = atoi( ((vgp_parkiranje*)second)->e_br);
+
+    if( a < b )
+        return -1;
+    if( a > b )
+        return 1;
+
+    return 0;
 }

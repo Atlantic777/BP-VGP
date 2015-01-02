@@ -21,8 +21,13 @@ add_executable(vgp src/vgp.c)
 target_link_libraries(vgp menu)
 target_link_libraries(vgp db_file)
 
+add_library(test_data tests/test_data.c)
+
 add_library(t_db_functions tests/db_functions.c)
-target_link_libraries(t_db_functions db_functions)
+target_link_libraries(t_db_functions  test_data db_functions)
+
+add_library(t_seq_file tests/seq_file.c)
+target_link_libraries(t_seq_file utils)
 
 add_executable(test-suite tests/test-suite.c)
-target_link_libraries(test-suite cunit db_functions t_db_functions utils)
+target_link_libraries(test-suite cunit db_functions t_db_functions utils t_seq_file)

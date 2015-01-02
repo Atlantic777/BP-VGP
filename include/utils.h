@@ -15,5 +15,7 @@ int get_boravak(long*);
 int str_digit(char *, int);
 
 int do_next_entry();
+void vgp_sort(vgp_parkiranje*, int);
+int compare_vgp_entries(const void*, const void*);
 
 #endif

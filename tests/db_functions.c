@@ -7,38 +7,27 @@
 #include "db_functions.h"
 #include <CUnit/CUnit.h>
 #include "utils.h"
+#include "tests/test_data.h"
 
 FILE *f = NULL;
 vgp_parkiranje sample_entries[5];
+
+int cmp_vgp_entries(vgp_parkiranje *given, vgp_parkiranje *expected)
+{
+    CU_ASSERT_STRING_EQUAL(given->e_br, expected->e_br);
+    CU_ASSERT_STRING_EQUAL(given->reg_br, expected->reg_br);
+    CU_ASSERT_EQUAL( given->epoch, expected->epoch );
+    CU_ASSERT_STRING_EQUAL( given->mesto, expected->mesto );
+    CU_ASSERT_EQUAL( given->boravak, expected->boravak );
+}
 
 
 int init_db_functions()
 {
     srand( time(NULL) );
     f = fopen("/tmp/db_functions_test.db", "w+");
+    init_test_data();
 
-    char e_br_sample[30] = "123456780";
-    char places[5][LEN_MESTO+1] = {
-            "Liman",
-            "Detel",
-            "NNaselje",
-            "Salajka",
-            "SlBara",
-            };
-
-    int i;
-    for(i = 0; i < 5; i++)
-    {
-        e_br_sample[8]++;
-        strcpy(sample_entries[i].e_br, e_br_sample);
-
-        sprintf(sample_entries[i].reg_br, "%03d", i);
-        time(&sample_entries[i].epoch);
-
-        strcpy(sample_entries[i].mesto, places[i]);
-
-        sample_entries[i].boravak = rand() % 1000000;
-    }
 
     return 0;
 }
@@ -58,22 +47,31 @@ void test_rw_one_entry()
     fseek(f, 0, SEEK_SET);
     db_read_vgp(f, &in);
 
-    CU_ASSERT_STRING_EQUAL(out->e_br, in.e_br);
-    CU_ASSERT_STRING_EQUAL(out->reg_br, in.reg_br);
-    CU_ASSERT_EQUAL(out->epoch, in.epoch);
+    cmp_vgp_entries( &in, out );
 }
 
 
-void teset_read_five_entries()
+void test_rw_five_entries()
 {
     int i;
+
+    fseek(f, 0, SEEK_SET);
     for(i = 0; i < 5; i++)
     {
         db_store_vgp(f, &sample_entries[i]);
     }
 
+    vgp_parkiranje in_entries[5];
+
+    fseek(f, 0, SEEK_SET);
     for(i = 0; i < 5; i++)
     {
+        db_read_vgp(f, &in_entries[i]);
+        //print_vgp_entry( &in_entries[i] );
+    }
 
+    for(i = 0; i < 5; i++)
+    {
+        cmp_vgp_entries( &in_entries[i], &sample_entries[i] );
     }
 }
