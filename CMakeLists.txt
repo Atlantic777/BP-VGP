@@ -15,9 +15,14 @@ add_library(db_file src/db_file.c)
 add_library(menu src/menu.c)
 target_link_libraries(menu cli_functions)
 
+add_library(db_functions src/db_functions.c)
+
 add_executable(vgp src/vgp.c)
 target_link_libraries(vgp menu)
 target_link_libraries(vgp db_file)
 
+add_library(t_db_functions tests/db_functions.c)
+target_link_libraries(t_db_functions db_functions)
+
 add_executable(test-suite tests/test-suite.c)
-target_link_libraries(test-suite cunit)
+target_link_libraries(test-suite cunit db_functions t_db_functions utils)

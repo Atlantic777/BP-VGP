@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 
 int str_digit(char *s, int len)
 {
@@ -27,6 +28,17 @@ vgp_parkiranje create_new_vgp_entry()
     get_boravak(&tmp.boravak);
 
     return tmp;
+}
+
+void print_vgp_entry(vgp_parkiranje *entry)
+{
+    puts("\n================================");
+    printf("Br. evidnecije:\t\t%s\n", entry->e_br);
+    printf("Br. registracije:\t%s\n", entry->reg_br);
+    printf("Vreme:\t%s", ctime(&entry->epoch) );
+    printf("Mesto:\t\t\t%s\n", entry->mesto);
+    printf("Boravak:\t\t%ld\n", entry->boravak);
+    puts("================================");
 }
 
 int get_e_br(char *e_br)

@@ -5,6 +5,7 @@
 #include <time.h>
 
 vgp_parkiranje create_new_vgp_entry();
+void print_vgp_entry(vgp_parkiranje *);
 
 int get_e_br(char*);
 int get_reg_br(char*);
