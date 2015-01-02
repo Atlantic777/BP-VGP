@@ -27,6 +27,35 @@ int create_new_file()
     return 0;
 }
 
+int do_next_entry()
+{
+    int  resp, ok = 0, i;
+    char ans;
+    char possible[4] = { 'N', 'Y', 'n', 'y' };
+
+    do {
+        printf("Sledeci unos? [Y/n]: ");
+        resp = scanf("%c", &ans);
+
+        if(resp == 0)
+            return 1;
+
+        if(resp != 1)
+            break;
+
+        for(i = 0; i < 4; i++)
+        {
+            if(ans == possible[i])
+            {
+                ok = i;
+                break;
+            }
+        }
+    } while( !ok );
+
+    return ans%2;
+}
+
 int choose_file()
 {
     puts("Otvaranje datoteke");
@@ -61,6 +90,11 @@ int create_serial_file()
     else
     {
         vgp_parkiranje tmp;
-        tmp = create_new_vgp_entry();
+        int ok = 1;
+        int resp;
+
+        do {
+            tmp = create_new_vgp_entry();
+        } while( do_next_entry() );
     }
 }
