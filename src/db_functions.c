@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "db_file.h"
+#include "vgp.h"
+#include "utils.h"
 
 #define ROOT_DIR "/tmp/"
 
@@ -51,8 +53,14 @@ int show_filename()
 
 int create_serial_file()
 {
-    // Proveri da li je otvorena datoteka
-    // Petlja za dodavanje sloga
-
-    // TODO dodati funkciju za upis jednog sloga
+    if( dbf->file == NULL)
+    {
+        puts("Nije otvorena datoteka");
+        return -1;
+    }
+    else
+    {
+        vgp_parkiranje tmp;
+        tmp = create_new_vgp_entry();
+    }
 }

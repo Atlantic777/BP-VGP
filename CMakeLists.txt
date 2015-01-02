@@ -3,7 +3,10 @@ project (Reludp)
 
 include_directories(include)
 
+add_library(utils src/utils.c)
+
 add_library(db_functions src/db_functions.c)
+target_link_libraries(db_functions utils)
 
 add_library(db_file src/db_file.c)
 
