@@ -3,18 +3,13 @@
 
 #include "vgp.h"
 #include <stdio.h>
+#include "act_utils.h"
 
-#define F   5
+struct main_block;
 
 typedef struct {
     vgp_parkiranje entry;
 } overflow_block;
-
-typedef struct {
-    vgp_parkiranje entries[F];
-    int n_overflows;
-    overflow_block *first_overflow;
-} main_block;
 
 typedef struct {
     int  block_addr;
@@ -33,7 +28,7 @@ typedef struct {
     struct index_block *more;
 } index_block;
 
-void create_bst(index_block *head, main_block *main_blocks_arr, int start, int end, int level);
+void create_bst(index_block *head, struct main_block *main_blocks_arr, int start, int end, int level);
 int  search_bst(char *key, FILE *f);
 void store_bst(index_block *node, FILE *f, int level, int *offset);
 

@@ -9,7 +9,7 @@
 #include "bst_utils.h"
 #include "csv2ser.h"
 #include "ser2seq.h"
-//#include "seq2act.h"
+#include "seq2act.h"
 
 // TODO brisanje elemenata
 // TODO status polje u vgp_parkiranje
@@ -47,18 +47,12 @@ int create_from_data()
 
     LEN = load_ser("serial.db", &vgp_arr);
 
-    //seq2act("sequential.db", "acct_test");
-
-    // read sequential data
-    rewind(seq);
-    for(i = 0; i < LEN; i++)
-    {
-        db_read_vgp(seq, &vgp_arr[i]);
-    }
+    seq2act("sequential.db", "act_test");
 
     return 0;
 
 
+    /*
     // create main zone
     main_block current_block;
     memset(&current_block.entries, 0, sizeof(vgp_parkiranje)*5);
@@ -110,6 +104,7 @@ int create_from_data()
     rewind(idx);
 
     printf("The block addr is: %d\n", search_bst("50273526", idx));
+    */
 
 
     fclose(seq);

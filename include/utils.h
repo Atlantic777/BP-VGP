@@ -1,6 +1,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#define load_seq load_ser
+
 #include "vgp.h"
 #include <time.h>
 
