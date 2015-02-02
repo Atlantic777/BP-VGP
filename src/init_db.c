@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "bst_utils.h"
+#include "csv2ser.h"
 
 // TODO brisanje elemenata
 // TODO status polje u vgp_parkiranje
@@ -20,10 +21,6 @@ FILE *seq;
 FILE *acct;
 FILE *idx;
 
-void csv_to_serial()
-{
-}
-
 int create_from_data()
 {
     // Open CSV data file
@@ -33,20 +30,12 @@ int create_from_data()
     FILE *acct = fopen("main.db", "wb+");
     FILE *idx  = fopen("idx.db", "wb+");
 
-    // For each entry, create struct
-    char *tmp = NULL;
-    ssize_t len = 100;
+    int csv_count = csv2ser("tests/data.csv", "serial.db");
+    printf("Read from CSV: %d\n", csv_count);
 
     vgp_parkiranje vgp_e;
 
-    // read CSV data
-    while( getline(&tmp, &len, f) != -1)
-    {
-        sscanf(tmp, "%s | %s | %d | %s | %ld",
-                    vgp_e.e_br, vgp_e.reg_br, (int*)(&vgp_e.epoch), vgp_e.mesto, &vgp_e.boravak);
-
-        db_store_vgp(ser, &vgp_e);
-    }
+    return 0;
 
     // store bin serial data
     rewind(ser);

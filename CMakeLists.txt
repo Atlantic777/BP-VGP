@@ -13,6 +13,7 @@ add_library(menu src/menu.c)
 add_library(db_functions src/db_functions.c)
 add_library(test_data tests/test_data.c)
 add_library(bst_utils src/bst_utils.c)
+add_library(csv2ser src/csv2ser.c)
 
 # test libs
 add_library(t_db_functions tests/db_functions.c)
@@ -22,12 +23,12 @@ add_library(t_act_file tests/active_file.c)
 add_executable(vgp src/vgp.c)
 add_executable(test-suite tests/test-suite.c)
 
-target_link_libraries(init_db db_functions bst_utils)
+target_link_libraries(init_db db_functions bst_utils csv2ser)
 target_link_libraries(cli_functions utils init_db)
 target_link_libraries(menu cli_functions)
 target_link_libraries(vgp menu db_file init_db)
 target_link_libraries(bst_utils db_file)
-
+target_link_libraries(csv2ser db_functions)
 
 target_link_libraries(t_db_functions  test_data db_functions)
 target_link_libraries(t_seq_file utils)

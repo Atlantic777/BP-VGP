@@ -34,7 +34,8 @@ typedef struct {
     struct index_block *more;
 } index_block;
 
-int   search_bst(char *key, FILE *f);
+void create_bst(index_block *head, main_block *main_blocks_arr, int start, int end, int level);
+int  search_bst(char *key, FILE *f);
 void store_bst(index_block *node, FILE *f, int level, int *offset);
 
 // The hell is this?
