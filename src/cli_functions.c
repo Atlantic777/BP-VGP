@@ -56,6 +56,16 @@ int do_next_entry()
     return ans%2;
 }
 
+int cli_create_from_data()
+{
+    puts("Kreiranje baze podataka");
+    puts("=======================");
+
+    create_from_data();
+
+    return 0;
+}
+
 int cli_choose_file()
 {
     puts("Otvaranje datoteke");

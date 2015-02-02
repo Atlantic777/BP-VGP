@@ -24,6 +24,7 @@ void init_menu()
             "Izaberi aktivnu datoteku.",
             "Prikazi naziv aktivne datoteke.",
             "Kreiraj serijsku datoteku.",
+            "Kreiraj bazu iz podataka.",
         };
 
     void *menu_item_functions[NUM_MENU_ITEMS] = {
@@ -32,6 +33,7 @@ void init_menu()
             cli_choose_file,
             cli_show_filename,
             cli_create_serial_file,
+            cli_create_from_data,
         };
 
     int i;

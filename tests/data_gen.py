@@ -22,7 +22,7 @@ def gen_reg_br():
     return str(uuid4())[:len_reg]
 
 def gen_epoch():
-    return str(time() + randint(-time_offset,time_offset))
+    return str( int(time()) + randint(-time_offset,time_offset))
 
 def gen_one_vgp():
     ev      = gen_evidencija()

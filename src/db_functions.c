@@ -4,12 +4,10 @@
 
 int db_store_vgp(FILE *f, vgp_parkiranje *entry)
 {
-    fwrite(entry, sizeof(vgp_parkiranje), 1, f);
-    return 0;
+    return fwrite(entry, sizeof(vgp_parkiranje), 1, f);
 }
 
 int db_read_vgp(FILE *f, vgp_parkiranje *entry)
 {
-    fread(entry, sizeof(vgp_parkiranje), 1, f);
-    return 0;
+    return fread(entry, sizeof(vgp_parkiranje), 1, f);
 }

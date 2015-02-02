@@ -33,3 +33,5 @@ CMake*
 Makefile
 cmake*
 vgp
+*.db
+*.csv
