@@ -5,7 +5,6 @@
 #include <stdio.h>
 
 #define F   5
-#define LEN 200
 
 typedef struct {
     vgp_parkiranje entry;

@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <stdlib.h>
+#include "db_functions.h"
 
 int str_digit(char *s, int len)
 {
@@ -155,4 +156,20 @@ int compare_vgp_entries(const void* first, const void* second)
         return 1;
 
     return 0;
+}
+
+int load_ser(char *filename_serial, vgp_parkiranje **vgp_arr)
+{
+    FILE *f_ser = fopen(filename_serial, "r");
+    int count   = 0;
+    int r_count = 0;
+
+    fread(&count, sizeof(count), 1, f_ser);
+    *vgp_arr = malloc( sizeof(vgp_parkiranje)*count );
+
+    while( db_read_vgp(f_ser, &((*vgp_arr)[r_count++])) && ( r_count <= count ) );
+
+
+    fclose(f_ser);
+    return count;
 }
