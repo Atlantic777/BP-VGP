@@ -4,6 +4,9 @@
 #include "db_file.h"
 #include "vgp.h"
 #include "utils.h"
+#include "bst_utils.h"
+#include "act_utils.h"
+#include <stdlib.h>
 
 #define ROOT_DIR "/tmp/"
 
@@ -107,4 +110,21 @@ int cli_create_serial_file()
             tmp = create_new_vgp_entry();
         } while( do_next_entry() );
     }
+}
+
+int cli_print_idx()
+{
+    int i = 0;
+    FILE *f = fopen("act_test_idx.db", "r");
+    stored_index_block *current_block = malloc( sizeof(stored_index_block) );
+
+    for(i = 0; i < 31; i++)
+    {
+        load_idx_block(f, i, (struct stored_index_block*)current_block);
+        printf("[%2d] - (%4s - %3d)\t-\t(%3s - %3d)\n", i, current_block->entries[0].key, current_block->entries[0].block_addr,
+                                                         current_block->entries[1].key, current_block->entries[1].block_addr);
+    }
+
+    free(current_block);
+    fclose(f);
 }

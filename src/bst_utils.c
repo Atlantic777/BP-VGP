@@ -127,7 +127,7 @@ void create_bst(index_node *head, index_entry *keys, int start, int end, int lev
     else
     {
         head->current->entries[1].block_addr = -1;
-        head->current->entries[1].key[0]     = 0;
+        strcpy(head->current->entries[1].key, "NONE");
         head->less = NULL;
         head->more = NULL;
         printf("NULL\n");
@@ -145,6 +145,10 @@ void create_bst(index_node *head, index_entry *keys, int start, int end, int lev
     else
     {
         strcpy( ((index_node*)head->less)->current->entries[0].key, "NONE" );
+        ((index_node*)head->less)->current->entries[0].block_addr = -1;
+
+        strcpy( ((index_node*)head->less)->current->entries[1].key, "NONE" );
+        ((index_node*)head->less)->current->entries[1].block_addr = -1;
     }
 
 
@@ -157,6 +161,10 @@ void create_bst(index_node *head, index_entry *keys, int start, int end, int lev
     else
     {
         strcpy( ((index_node*)head->more)->current->entries[0].key, "NONE" );
+        ((index_node*)head->more)->current->entries[0].block_addr = -1;
+
+        strcpy( ((index_node*)head->more)->current->entries[1].key, "NONE" );
+        ((index_node*)head->more)->current->entries[1].block_addr = -1;
     }
 
 }

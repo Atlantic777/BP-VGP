@@ -35,3 +35,5 @@ cmake*
 vgp
 *.db
 *.csv
+
+test-suite

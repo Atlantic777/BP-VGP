@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#define NUM_MENU_ITEMS 6
+#define NUM_MENU_ITEMS 7
 
 typedef struct {
     char title[30];
