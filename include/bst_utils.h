@@ -25,8 +25,8 @@ typedef struct {
 
 typedef struct {
     stored_index_block *current;
-    struct index_block *less;
-    struct index_block *more;
+    struct index_node *less;
+    struct index_node *more;
 } index_node;
 
 typedef struct deq_node {

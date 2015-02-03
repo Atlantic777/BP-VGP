@@ -13,7 +13,7 @@ int seq2act(char *filename_seq, char *prefix_act)
 
     int n_blocks = build_main_file(prefix_act, vgp_arr, count, (struct index_entry**)&keys);
     build_index_file(prefix_act, (struct index_entry*)keys, count/3);
-    //build_overrun_file();
+    build_overrun_file(prefix_act);
 
     free(vgp_arr);
     free(keys);

@@ -136,7 +136,7 @@ void create_bst(index_node *head, index_entry *keys, int start, int end, int lev
 
 
     head->less = malloc( sizeof(index_node) );
-    ((index_node*)head->less)->current = malloc( sizeof(index_entry) );
+    ((index_node*)head->less)->current = malloc( sizeof(stored_index_block));
 
     if( start < mid )
     {
@@ -149,7 +149,7 @@ void create_bst(index_node *head, index_entry *keys, int start, int end, int lev
 
 
     head->more = malloc( sizeof(index_node) );
-    ((index_node*)head->more)->current = malloc( sizeof(index_entry) );
+    ((index_node*)head->more)->current = malloc( sizeof(stored_index_block) );
     if( (mid+1) < end )
     {
         create_bst( (index_node*)head->more, keys, mid+2, end  , level+1);
