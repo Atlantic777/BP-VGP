@@ -9,6 +9,7 @@ struct main_block;
 
 typedef struct {
     vgp_parkiranje entry;
+    int next_entry_offset;
 } overflow_block;
 
 typedef struct {
@@ -18,19 +19,32 @@ typedef struct {
 
 typedef struct {
     index_entry entries[2];
-    int less;
-    int more;
+    int less_offset;
+    int more_offset;
 } stored_index_block;
 
 typedef struct {
-    index_entry entries[2];
+    stored_index_block *current;
     struct index_block *less;
     struct index_block *more;
-} index_block;
+} index_node;
 
-void create_bst(index_block *head, struct main_block *main_blocks_arr, int start, int end, int level);
+typedef struct deq_node {
+    index_node *data;
+    struct deq_node *next;
+} deq_node;
+
+typedef struct {
+    deq_node *head;
+    deq_node *tail;
+} deq_t;
+
+void enqueue(deq_t *deq, index_node *new_node);
+index_node* dequeue(deq_t *deq);
+
+void create_bst(index_node *head, index_entry *keys, int start, int end, int level);
 int  search_bst(char *key, FILE *f);
-void store_bst(index_block *node, FILE *f, int level, int *offset);
+void store_bst(index_node *node, FILE *f, int level, int *offset);
 
 // The hell is this?
 stored_index_block tmp;

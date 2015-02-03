@@ -4,8 +4,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-void store_bst(index_block *node, FILE *f, int level, int *offset)
+void store_bst(index_node *node, FILE *f, int level, int *offset)
 {
+    /*
     int left  = node->less ? 2*(*offset)+1 : -1;
     int right = node->more ? 2*(*offset)+2 : -1;
 
@@ -34,11 +35,13 @@ void store_bst(index_block *node, FILE *f, int level, int *offset)
         store_bst((index_block*)node->more, f, level+1, offset);
         right = 2*(*offset)+2;
     }
+    */
 
 }
 
 int search_bst(char *key, FILE *f)
 {
+    /*
     int offset = -1;
     stored_index_block tmp, l, m;
     int i;
@@ -87,56 +90,100 @@ int search_bst(char *key, FILE *f)
     } while( tmp.less || tmp.more );
 
     return offset;
+    */
 
+    return -1;
 }
 
 
-void create_bst(index_block *head, main_block *main_blocks_arr, int start, int end, int level)
+void create_bst(index_node *head, index_entry *keys, int start, int end, int level)
 {
+    // what does this check do?
     if(start > end) return;
 
+    // what does this check do?
     if( head == NULL ) return;
 
+    // get into the middle
     int mid = start + (end - start)/2;
 
+
+    // print shitty info
     printf("l %d ", level);
     printf("storing info about blocks %d ", mid);
 
 
-    head->entries[0].block_addr = mid;
-    strcpy(head->entries[0].key, main_blocks_arr[mid].entries[0].e_br);
+    // set offset into the current node. Current has to exist!
+    head->current = malloc( sizeof( index_entry ) * 2);
+    head->current->entries[0].block_addr = mid;
+    strcpy(head->current->entries[0].key, keys[mid].key);
+
 
     if(mid+1 <= end)
     {
         printf("%d\n", mid+1);
-        head->entries[1].block_addr =  mid+1;
-        strcpy(head->entries[1].key, main_blocks_arr[mid+1].entries[0].e_br);
+        head->current->entries[1].block_addr =  mid+1;
+        strcpy(head->current->entries[1].key, keys[mid+1].key);
     }
     else
     {
-        head->entries[1].block_addr = -1;
-        head->entries[1].key[0]     = 0;
+        head->current->entries[1].block_addr = -1;
+        head->current->entries[1].key[0]     = 0;
         printf("NULL\n");
     }
 
     if( start < mid )
     {
-        head->less = malloc( sizeof(index_block) );
-        create_bst( (index_block*)head->less, main_blocks_arr, start, mid-1, level+1 );
+        head->less = malloc( sizeof(index_node) );
+        create_bst( (index_node*)head->less, keys, start, mid-1, level+1 );
     }
     else
     {
         head->less = NULL;
     }
+
 
     if( (mid+1) < end )
     {
-        head->more = malloc( sizeof(index_block) );
-        create_bst( (index_block*)head->more, main_blocks_arr, mid+2, end  , level+1);
+        head->more = malloc( sizeof(index_node) );
+        create_bst( (index_node*)head->more, keys, mid+2, end  , level+1);
     }
     else
     {
-        head->less = NULL;
+        head->more = NULL;
     }
 }
 
+void enqueue(deq_t *deq, index_node *new_node)
+{
+    deq_node *new_tail_node = malloc( sizeof(deq_node) );
+
+    new_tail_node->data = new_node;
+    new_tail_node->next = NULL;
+
+    if( deq->tail != NULL)
+    {
+        deq->tail->next = new_tail_node;
+    }
+    else
+    {
+        deq->head = new_tail_node;
+    }
+    deq->tail = new_tail_node;
+
+}
+
+index_node* dequeue(deq_t *deq)
+{
+    deq_node *old_head = deq->head;
+    index_node *ret_data = deq->head->data;
+
+    if( deq->head == deq->tail)
+        deq->tail = NULL;
+
+    deq->head = deq->head->next;
+
+    free(old_head);
+
+    return ret_data;
+}
