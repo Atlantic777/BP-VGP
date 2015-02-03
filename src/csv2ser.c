@@ -13,23 +13,26 @@ int csv2ser(char *filename_csv, char *filename_serial)
     if( f_csv == NULL )
         puts("something went wrong with opening the CSV file");
 
+
     int count = 0;
-    char *current_line[CSV_LINE_LEN];
+    char *current_line = malloc( CSV_LINE_LEN );
     vgp_parkiranje vgp_e;
 
     ssize_t len = CSV_LINE_LEN;
 
-    fseek(f_ser, sizeof(int), SEEK_SET);
+    fwrite( &count, sizeof(count), 1, f_ser );
 
-    while( getline( (char**)&current_line, &len, f_csv) != -1 )
+    while( getline( &current_line, &len, f_csv) != -1 )
     {
-        sscanf((const char*)*current_line, "%s | %s | %d | %s | %ld",
+        sscanf((const char*)current_line, "%s | %s | %d | %s | %ld",
                     vgp_e.e_br, vgp_e.reg_br, (int*)(&vgp_e.epoch), vgp_e.mesto, &vgp_e.boravak);
 
         db_store_vgp(f_ser, &vgp_e);
 
         count++;
     }
+
+    free(current_line);
 
     rewind(f_ser);
     fwrite(&count, sizeof(count), 1, f_ser);
