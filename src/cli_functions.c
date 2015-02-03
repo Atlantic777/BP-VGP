@@ -128,3 +128,27 @@ int cli_print_idx()
     free(current_block);
     fclose(f);
 }
+
+int cli_print_main()
+{
+    FILE *f = fopen("act_test_main.db", "r");
+    main_block current_block;
+
+    int i = 0;
+    int j;
+
+    while( load_main_block(f, i, &current_block) )
+    {
+        printf("%3d *** ", i);
+
+        for(j = 0; j < 5; j++)
+        {
+            printf("%5s", current_block.entries[j].e_br);
+        }
+
+        printf("\n");
+        i++;
+    }
+
+    fclose(f);
+}
