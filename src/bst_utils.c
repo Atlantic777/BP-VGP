@@ -114,7 +114,6 @@ void create_bst(index_node *head, index_entry *keys, int start, int end, int lev
 
 
     // set offset into the current node. Current has to exist!
-    head->current = malloc( sizeof( index_entry ) * 2);
     head->current->entries[0].block_addr = mid;
     strcpy(head->current->entries[0].key, keys[mid].key);
 
@@ -129,29 +128,37 @@ void create_bst(index_node *head, index_entry *keys, int start, int end, int lev
     {
         head->current->entries[1].block_addr = -1;
         head->current->entries[1].key[0]     = 0;
+        head->less = NULL;
+        head->more = NULL;
         printf("NULL\n");
+        return;
     }
+
+
+    head->less = malloc( sizeof(index_node) );
+    ((index_node*)head->less)->current = malloc( sizeof(index_entry) );
 
     if( start < mid )
     {
-        head->less = malloc( sizeof(index_node) );
         create_bst( (index_node*)head->less, keys, start, mid-1, level+1 );
     }
     else
     {
-        head->less = NULL;
+        strcpy( ((index_node*)head->less)->current->entries[0].key, "NONE" );
     }
 
 
+    head->more = malloc( sizeof(index_node) );
+    ((index_node*)head->more)->current = malloc( sizeof(index_entry) );
     if( (mid+1) < end )
     {
-        head->more = malloc( sizeof(index_node) );
         create_bst( (index_node*)head->more, keys, mid+2, end  , level+1);
     }
     else
     {
-        head->more = NULL;
+        strcpy( ((index_node*)head->more)->current->entries[0].key, "NONE" );
     }
+
 }
 
 void enqueue(deq_t *deq, index_node *new_node)
