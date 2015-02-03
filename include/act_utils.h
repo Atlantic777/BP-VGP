@@ -16,5 +16,6 @@ typedef struct main_block {
 
 
 int build_main_file(char *file_prefix, vgp_parkiranje *vgp_arr, int count, struct index_entry **keys);
+int build_index_file(char *file_prefix, struct index_entry *keys, int count);
 
 #endif

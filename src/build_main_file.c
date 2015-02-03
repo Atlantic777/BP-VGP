@@ -20,7 +20,7 @@ int build_main_file(char *file_prefix, vgp_parkiranje *vgp_arr, int count, struc
     main_block  current_main_block;
 
     strcpy(filename_main, file_prefix);
-    strcat( filename_main+strlen(file_prefix), MAIN_FILE_SUFFIX );
+    strcat(filename_main, MAIN_FILE_SUFFIX );
     puts(filename_main);
 
     FILE *f_main = fopen( filename_main, "w");

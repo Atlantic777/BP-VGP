@@ -18,7 +18,7 @@
 // TODO pametnija reorganizacija baze
 // TODO proveriti tip povezivanja prekoračilaca (indirektno)
 //
-FILE *f        ;
+FILE *f;
 FILE *seq;
 FILE *acct;
 FILE *idx;
@@ -28,9 +28,9 @@ int create_from_data()
     // Open CSV data file
     // FILE *f    = fopen("tests/data.csv", "r");
     // FILE *ser  = fopen("serial.db", "wb+");
-    FILE *seq  = fopen("sequential.db", "wb+");
-    FILE *acct = fopen("main.db", "wb+");
-    FILE *idx  = fopen("idx.db", "wb+");
+    // FILE *seq  = fopen("sequential.db", "wb+");
+    // FILE *acct = fopen("main.db", "wb+");
+    // FILE *idx  = fopen("idx.db", "wb+");
 
     vgp_parkiranje vgp_e;
     vgp_parkiranje *vgp_arr;
@@ -53,31 +53,6 @@ int create_from_data()
 
 
     /*
-    // create main zone
-    main_block current_block;
-    memset(&current_block.entries, 0, sizeof(vgp_parkiranje)*5);
-    current_block.n_overflows = 0;
-    current_block.first_overflow = NULL;
-
-    main_block main_blocks_arr[(int)(ceil( (double)LEN/3.))];
-
-    for(i = 0; i < LEN; i++)
-    {
-        // get 3 entries
-        memcpy(&current_block.entries[i%3], &vgp_arr[i], sizeof(vgp_parkiranje) );
-
-        // store block
-        if( i%3 == 2 || (i+1) == LEN)
-        {
-            fwrite(&current_block, sizeof(main_block), 1, acct);
-            memcpy( &main_blocks_arr[i/3], &current_block, sizeof(main_block) );
-
-            memset(&current_block.entries, 0, sizeof(vgp_parkiranje)*5);
-        }
-    }
-
-
-
     // create index zone
     index_block head;
     head.less = NULL;
@@ -107,9 +82,9 @@ int create_from_data()
     */
 
 
-    fclose(seq);
-    fclose(acct);
-    fclose(idx);
+    //fclose(seq);
+    //fclose(acct);
+    //fclose(idx);
 
     return 0;
 }
