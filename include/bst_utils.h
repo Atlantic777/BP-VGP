@@ -43,11 +43,5 @@ void enqueue(deq_t *deq, index_node *new_node);
 index_node* dequeue(deq_t *deq);
 
 void create_bst(index_node *head, index_entry *keys, int start, int end, int level);
-int  search_bst(char *key, FILE *f);
-void store_bst(index_node *node, FILE *f, int level, int *offset);
-
-// The hell is this?
-stored_index_block tmp;
-
 
 #endif
