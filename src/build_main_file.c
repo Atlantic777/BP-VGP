@@ -27,11 +27,13 @@ int build_main_file(char *file_prefix, vgp_parkiranje *vgp_arr, int count, struc
 
     *keys = malloc( sizeof(index_entry)*n_blocks);
 
+    memset(&current_main_block, 0, sizeof(current_main_block) );
+
     for(i = 0; i < count; i++)
     {
         memcpy(&current_main_block.entries[i%3], &vgp_arr[i], sizeof(vgp_parkiranje));
 
-        if( i%3 || (i+1) == count)
+        if( (i%3 == 2) || (i+1) == count)
         {
             fwrite( &current_main_block, sizeof(main_block), 1, f_main);
 
