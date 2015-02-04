@@ -19,7 +19,12 @@ int build_main_file(db_file *dbf, vgp_parkiranje *vgp_arr, int count, struct ind
 
     main_block  current_main_block;
 
-    FILE *f_main = dbf->f_main;
+    //strcpy(filename_main, file_prefix);
+    strcat(filename_main, MAIN_FILE_SUFFIX );
+    puts(filename_main);
+
+    FILE *f_main = fopen("/tmp/test_main.db", "w+");
+    rewind(f_main);
 
     *keys = malloc( sizeof(index_entry)*n_blocks);
 
@@ -40,7 +45,8 @@ int build_main_file(db_file *dbf, vgp_parkiranje *vgp_arr, int count, struct ind
         }
     }
 
-    fflush(dbf->f_main);
+    //fclose(f_main);
+    fflush(f_main);
 
     return n_blocks;
 }
