@@ -6,7 +6,6 @@
 int main()
 {
     init_menu();
-    init_db_file();
 
     int resp = 0;
     int end = 0;

@@ -33,6 +33,8 @@ int build_main_file(db_file *dbf, vgp_parkiranje *vgp_arr, int count, struct ind
 
     for(i = 0; i < count; i++)
     {
+        current_main_block.first_overflow_offset = -1;
+
         memcpy(&current_main_block.entries[i%3], &vgp_arr[i], sizeof(vgp_parkiranje));
 
         if( (i%3 == 2) || (i+1) == count)

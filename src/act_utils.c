@@ -206,6 +206,7 @@ int store_entry(db_file *dbf, vgp_parkiranje *entry)
 
        int last_addr;
        last_addr = fseek(dbf->f_ovf, 0, SEEK_END);
+       last_addr = ftell(dbf->f_ovf);
        last_addr /= sizeof( overflow_block );
 
        overflow_block ovf;
@@ -216,6 +217,7 @@ int store_entry(db_file *dbf, vgp_parkiranje *entry)
        load_main_block( dbf->f_main, block_offset, &m_block );
        m_block.n_overflows++;
        m_block.first_overflow_offset = last_addr;
+       printf("Writing main block on %d ovf is on %d\n", block_offset, last_addr);
        fseek( dbf->f_main, block_offset*sizeof(main_block), SEEK_SET);
        fwrite( &m_block, sizeof(main_block), 1, dbf->f_main);
 

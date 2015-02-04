@@ -126,19 +126,16 @@ int cli_create_serial_file()
 int cli_print_idx()
 {
     int i = 0;
-    FILE *f = dbf.f_idx;
-
     stored_index_block *current_block = malloc( sizeof(stored_index_block) );
 
     for(i = 0; i < 31; i++)
     {
-        load_idx_block(f, i, (struct stored_index_block*)current_block);
+        load_idx_block(dbf.f_main, i, (struct stored_index_block*)current_block);
         printf("[%2d] - (%4s - %3d)\t-\t(%3s - %3d)\n", i, current_block->entries[0].key, current_block->entries[0].block_addr,
                                                          current_block->entries[1].key, current_block->entries[1].block_addr);
     }
 
     free(current_block);
-    fclose(f);
 }
 
 int cli_print_main()
@@ -170,8 +167,6 @@ int cli_print_main()
 
 int cli_find_key()
 {
-    FILE *f_idx = fopen("act_test_idx.db", "r");
-
     if(strlen(dbf.f_prefix) == 0)
     {
         puts("Nije otvorena datoteka");
@@ -184,8 +179,6 @@ int cli_find_key()
 
     int r = find_block_for_key(dbf.f_idx, key);
     printf("Matching block %d\n", r);
-
-    fclose(f_idx);
     return 0;
 }
 
