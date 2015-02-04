@@ -32,6 +32,7 @@ void init_menu()
             "Dodaj zapis",
             "Formiraj sekvencijalnu",
             "Formiraj aktivnu",
+            "Reorganizacija",
         };
 
     void *menu_item_functions[NUM_MENU_ITEMS] = {
@@ -48,6 +49,7 @@ void init_menu()
             cli_store_entry,
             cli_create_seq,
             cli_create_act,
+            cli_reorganize,
         };
 
     int i;

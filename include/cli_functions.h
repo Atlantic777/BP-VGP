@@ -14,5 +14,6 @@ int cli_find_entry();
 int cli_store_entry();
 int cli_create_seq();
 int cli_create_act();
+int cli_reorganize();
 
 #endif

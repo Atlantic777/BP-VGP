@@ -13,6 +13,7 @@ int build_index_file(db_file *dbf, struct index_entry *keys, int count)
 
     FILE *f_idx = fopen(filename_index, "w+"); // dbf->f_idx;
     dbf->f_idx = f_idx;
+    //rewind(dbf->f_idx);
 
     index_node head;
     head.current = malloc( sizeof(stored_index_block) );
@@ -52,13 +53,13 @@ int build_index_file(db_file *dbf, struct index_entry *keys, int count)
             current_node->current->more_offset = current_offset*2+2;
         }
 
-        fwrite( current_node->current, sizeof( stored_index_block ), 1, f_idx );
+        fwrite( current_node->current, sizeof( stored_index_block ), 1, dbf->f_idx );
 
         current_offset++;
     }
 
     // destroy bst
 
-    fflush(f_idx);
+    fflush(dbf->f_idx);
     return 0;
 }

@@ -21,6 +21,7 @@ int main()
         }
         else if ( resp == 0 )
         {
+            menu_items_arr[resp].function();
             end = 1;
         }
         else {

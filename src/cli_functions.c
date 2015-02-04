@@ -18,6 +18,8 @@ db_file dbf;
 
 int cli_exit_program()
 {
+    puts(dbf.f_prefix);
+    close_db_files(&dbf);
     return 0;
 }
 
@@ -245,5 +247,103 @@ int cli_create_seq()
 int cli_create_act()
 {
     seq2act(&dbf);
+    return 0;
+}
+
+int cli_reorganize()
+{
+    if(strlen(dbf.f_prefix) == 0)
+    {
+        puts("Nije otvorena datoteka");
+        return -1;
+    }
+
+    //close_db_files( &dbf );
+    //open_db_files( &dbf, dbf.path, dbf.f_prefix );
+
+    // check if should reorganize
+    rewind(dbf.f_main);
+    int count;
+    int should = 0;
+
+    main_block current_block;
+
+    int i = 0;
+    int j;
+
+    while( load_main_block( dbf.f_main, i, &current_block) )
+    {
+        //printf("Block: %2d - [%2d]\n", i, current_block.n_overflows);
+
+        if( current_block.n_overflows >= 3 )
+        {
+            should = 1;
+            break;
+        }
+        i++;
+    }
+
+    should = 1;
+    int next = -1;
+
+    if(should == 0)
+    {
+        puts("Shouldn't reorganize");
+        return -1;
+    }
+
+    db_file t_dbf;
+    open_db_files(&t_dbf, "/tmp/", "reorg");
+
+    overflow_block ovf;
+
+    puts("Starting reorganize");
+
+    count = 0;
+    fwrite(&count, sizeof(count), 1, t_dbf.f_ser);
+
+    i = 0;
+    while( load_main_block( dbf.f_main, i, &current_block) )
+    {
+        // extract normal entries
+        for(j = 0; j < 5; j++)
+        {
+            if( strlen( current_block.entries[j].e_br) == 0)
+                break;
+            else
+            {
+                puts(current_block.entries[j].e_br);
+                db_store_vgp( t_dbf.f_ser, &current_block.entries[j] );
+                count++;
+            }
+
+        }
+
+        // extract overflows
+        if( current_block.n_overflows > 0)
+        {
+            puts("Got overflow!");
+            next = current_block.first_overflow_offset;
+
+            while(next != -1)
+            {
+                puts("doing overflow");
+                load_ovf_block( dbf.f_ovf, next, (struct overflow_block*)&ovf);
+                db_store_vgp( t_dbf.f_ser, &ovf.entry );
+                next = ovf.next_entry_offset;
+                count++;
+            }
+        }
+        i++;
+    }
+
+    rewind(t_dbf.f_ser);
+    fwrite(&count, sizeof(count), 1, t_dbf.f_ser);
+
+    ser2seq(&t_dbf);
+    seq2act(&t_dbf);
+
+    close_db_files(&t_dbf);
+
     return 0;
 }
