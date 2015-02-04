@@ -19,11 +19,11 @@ int build_main_file(db_file *dbf, vgp_parkiranje *vgp_arr, int count, struct ind
 
     main_block  current_main_block;
 
-    //strcpy(filename_main, file_prefix);
+    strcpy(filename_main, dbf->f_prefix);
     strcat(filename_main, MAIN_FILE_SUFFIX );
     puts(filename_main);
 
-    FILE *f_main = fopen("/tmp/test_main.db", "w+");
+    FILE *f_main = fopen(filename_main, "w+");
     rewind(f_main);
 
     *keys = malloc( sizeof(index_entry)*n_blocks);

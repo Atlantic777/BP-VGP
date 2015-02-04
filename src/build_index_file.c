@@ -8,10 +8,10 @@ int build_index_file(db_file *dbf, struct index_entry *keys, int count)
     char filename_index[256];
     int i = 0;
 
-    //strcpy(filename_index, file_prefix);
+    strcpy(filename_index, dbf->f_prefix);
     strcat(filename_index, "_idx.db");
 
-    FILE *f_idx = fopen("/tmp/test_idx.db", "w+"); // dbf->f_idx;
+    FILE *f_idx = fopen(filename_index, "w+"); // dbf->f_idx;
 
     index_node head;
     head.current = malloc( sizeof(stored_index_block) );
