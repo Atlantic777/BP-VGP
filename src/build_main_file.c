@@ -24,6 +24,7 @@ int build_main_file(db_file *dbf, vgp_parkiranje *vgp_arr, int count, struct ind
     puts(filename_main);
 
     FILE *f_main = fopen(filename_main, "w+");
+    dbf->f_main = f_main;
     rewind(f_main);
 
     *keys = malloc( sizeof(index_entry)*n_blocks);

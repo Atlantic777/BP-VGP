@@ -16,6 +16,8 @@ int seq2act(db_file *dbf)
 
     // build_overrun_file(prefix_act);
 
+    //open_db_files( dbf, dbf->path, dbf->f_prefix );
+
     free(vgp_arr);
     free(keys);
 

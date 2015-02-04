@@ -54,7 +54,8 @@ int get_e_br(char *e_br)
 
         int len = strlen(tmp);
 
-        if(len != LEN_E_BR || !str_digit(tmp, len) )
+        //if(len != LEN_E_BR || !str_digit(tmp, len) )
+        if( !str_digit(tmp, len) )
         {
             puts("Evidencioni broj se sastoji od tacno 9 cifara.");
             puts("Upisi ponovo.");

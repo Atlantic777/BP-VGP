@@ -126,7 +126,8 @@ int cli_create_serial_file()
 int cli_print_idx()
 {
     int i = 0;
-    FILE *f = fopen("act_test_idx.db", "r");
+    FILE *f = dbf.f_idx;
+
     stored_index_block *current_block = malloc( sizeof(stored_index_block) );
 
     for(i = 0; i < 31; i++)
@@ -142,8 +143,6 @@ int cli_print_idx()
 
 int cli_print_main()
 {
-    FILE *f = fopen("act_test_main.db", "r");
-
     if(strlen(dbf.f_prefix) == 0)
     {
         puts("Nije otvorena datoteka");
@@ -155,7 +154,7 @@ int cli_print_main()
     int i = 0;
     int j;
 
-    while( load_main_block(f, i, &current_block) )
+    while( load_main_block( dbf.f_main, i, &current_block) )
     {
         printf("%3d *** ", i);
 
@@ -167,8 +166,6 @@ int cli_print_main()
         printf("\n");
         i++;
     }
-
-    fclose(f);
 }
 
 int cli_find_key()
@@ -185,7 +182,7 @@ int cli_find_key()
 
     printf("Key to find: "); scanf("%s", key);
 
-    int r = find_block_for_key(f_idx, key);
+    int r = find_block_for_key(dbf.f_idx, key);
     printf("Matching block %d\n", r);
 
     fclose(f_idx);
@@ -194,8 +191,6 @@ int cli_find_key()
 
 int cli_find_entry()
 {
-    FILE *f_main = fopen("act_test_main.db", "r");
-
     if(strlen(dbf.f_prefix) == 0)
     {
         puts("Nije otvorena datoteka");
@@ -209,19 +204,14 @@ int cli_find_entry()
 
     vgp_parkiranje res;
 
-    if(find_entry(f_main, key, &res))
+    if(find_entry(&dbf, key, &res))
         print_vgp_entry( &res );
     else
         puts("Nema ga!");
-
-    fclose(f_main);
 }
 
 int cli_store_entry()
 {
-    FILE *f_main = fopen("act_test_main.db", "r+");
-    FILE *f_ovf  = fopen("act_test_ovf.db", "r+");
-
     if(strlen(dbf.f_prefix) == 0)
     {
         puts("Nije otvorena datoteka");
@@ -232,7 +222,5 @@ int cli_store_entry()
 
     store_entry( &dbf, &p );
 
-    fclose(f_main);
-    fclose(f_ovf);
     return 0;
 }

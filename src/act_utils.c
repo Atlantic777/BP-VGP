@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "vgp.h"
+#include "db_functions.h"
 
 void build_overrun_file(char *file_prefix)
 {
@@ -37,6 +38,7 @@ int load_main_block(FILE *f_main, int n, main_block *block)
 
 int find_block_for_key(FILE *f_idx, char *key)
 {
+    rewind(f_idx);
     int idx_offset = 0;
     int next_offset = -1;
     int key_val = atoi(key);
@@ -53,16 +55,12 @@ int find_block_for_key(FILE *f_idx, char *key)
         int e1_key  = atoi(current_idx_block->entries[0].key);
         int e2_key  = atoi(current_idx_block->entries[1].key);
 
-        printf("Current keys: %3d and %3d\n", e1_key, e2_key);
-
         if( (key_val > e1_key) && (key_val <= e2_key) )
         {
-            puts("staying here");
             return current_idx_block->entries[1].block_addr;
         }
         else if( (key_val > e2_key) && (e2_key != 0) )
         {
-            puts("turning right");
             idx_offset = 2*idx_offset+2;
 
             ret = load_idx_block(f_idx, idx_offset, (struct stored_index_block*)tmp_block);
@@ -86,8 +84,6 @@ int find_block_for_key(FILE *f_idx, char *key)
         }
         else
         {
-            // turn left, do nothing
-            puts("turning left");
             idx_offset = 2*idx_offset+1;
 
 
@@ -106,17 +102,19 @@ int find_block_for_key(FILE *f_idx, char *key)
     }
 }
 
-int find_entry(FILE *f_main, char *key, vgp_parkiranje *result)
+int find_entry(db_file *dbf, char *key, vgp_parkiranje *result)
 {
-    FILE *f_idx = fopen("act_test_idx.db", "r");
-    int offset = find_block_for_key(f_idx, key);
+    printf("searching block for %s\n", key);
+    int offset = find_block_for_key(dbf->f_idx, key);
 
     main_block block;
-    load_main_block(f_main, offset, &block);
+    puts("fetching block");
+    load_main_block(dbf->f_main, offset, &block);
 
     int i;
 
     // search inside the block
+    puts("starting search");
     for( i=0; i < MAIN_BLOCKING_FACTOR; i++)
     {
         if( strcmp( key, block.entries[i].e_br ) == 0)
@@ -139,15 +137,24 @@ int find_entry(FILE *f_main, char *key, vgp_parkiranje *result)
 
 int store_entry(db_file *dbf, vgp_parkiranje *entry)
 {
-   FILE *f_idx = fopen("act_test_idx.db", "r");
    int i;
 
-   int entry_offset = find_entry(dbf->f_main, entry->e_br, NULL);
+   puts("store entry");
+   int block_offset = find_block_for_key(dbf->f_idx, entry->e_br);
+   int entry_offset = find_entry(dbf, entry->e_br, NULL);
 
    if(entry_offset < 0)
+   {
        printf("Empty offset is: %d\n", -entry_offset);
+       fseek(dbf->f_main, block_offset*sizeof(main_block), SEEK_SET);
+       fseek(dbf->f_main, -entry_offset*sizeof(vgp_parkiranje), SEEK_CUR);
+
+       db_store_vgp(dbf->f_main, entry);
+   }
    else if(entry_offset == 1)
+   {
        puts("key already there!");
+   }
 
    // or create new in overflow area
    // store it

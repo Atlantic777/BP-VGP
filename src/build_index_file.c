@@ -12,6 +12,7 @@ int build_index_file(db_file *dbf, struct index_entry *keys, int count)
     strcat(filename_index, "_idx.db");
 
     FILE *f_idx = fopen(filename_index, "w+"); // dbf->f_idx;
+    dbf->f_idx = f_idx;
 
     index_node head;
     head.current = malloc( sizeof(stored_index_block) );
@@ -58,6 +59,6 @@ int build_index_file(db_file *dbf, struct index_entry *keys, int count)
 
     // destroy bst
 
-    fclose(f_idx);
+    fflush(f_idx);
     return 0;
 }
