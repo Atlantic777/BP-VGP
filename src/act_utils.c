@@ -12,7 +12,7 @@ void build_overrun_file(char *file_prefix)
 
     strcpy(filename, file_prefix);
     strcat(filename, "_ovf.db");
-    FILE *f = fopen(filename, "w");
+    FILE *f = fopen(filename, "r+");
 }
 
 int load_idx_block(FILE *f_idx, int n, struct stored_index_block *block)
@@ -258,10 +258,6 @@ int store_entry(db_file *dbf, vgp_parkiranje *entry)
 
        fflush(dbf->f_main);
        fflush(dbf->f_ovf);
-
-       // get last overflow
-       // move one next
-       // store
    }
 }
 

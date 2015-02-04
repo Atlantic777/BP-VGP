@@ -12,5 +12,7 @@ int cli_print_main();
 int cli_find_key();
 int cli_find_entry();
 int cli_store_entry();
+int cli_create_seq();
+int cli_create_act();
 
 #endif

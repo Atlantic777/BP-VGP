@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include "init_db.h"
 #include "db_functions.h"
+#include "ser2seq.h"
+#include "seq2act.h"
 
 #define ROOT_DIR "/tmp/"
 
@@ -115,10 +117,17 @@ int cli_create_serial_file()
         int ok = 1;
         int resp;
 
+        int count = 0;
+        fwrite( &count, sizeof(count), 1, dbf.f_ser);
+
         do {
             tmp = create_new_vgp_entry();
             db_store_vgp( dbf.f_ser, &tmp );
+            count++;
         } while( do_next_entry() );
+
+        rewind(dbf.f_ser);
+        fwrite( &count, sizeof(count), 1, dbf.f_ser);
     }
     fflush(dbf.f_ser);
 }
@@ -216,5 +225,24 @@ int cli_store_entry()
 
     store_entry( &dbf, &p );
 
+    return 0;
+}
+
+int cli_create_seq()
+{
+    if(strlen(dbf.f_prefix) == 0)
+    {
+        puts("Nije otvorena datoteka");
+        return -1;
+    }
+
+    ser2seq(&dbf);
+
+    return 0;
+}
+
+int cli_create_act()
+{
+    seq2act(&dbf);
     return 0;
 }

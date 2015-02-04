@@ -30,6 +30,8 @@ void init_menu()
             "Pronadji kljuc",
             "Pronadji zapis",
             "Dodaj zapis",
+            "Formiraj sekvencijalnu",
+            "Formiraj aktivnu",
         };
 
     void *menu_item_functions[NUM_MENU_ITEMS] = {
@@ -44,6 +46,8 @@ void init_menu()
             cli_find_key,
             cli_find_entry,
             cli_store_entry,
+            cli_create_seq,
+            cli_create_act,
         };
 
     int i;
