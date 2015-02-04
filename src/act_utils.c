@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "vgp.h"
 
 void build_overrun_file(char *file_prefix)
 {
@@ -66,7 +67,6 @@ int find_block_for_key(FILE *f_idx, char *key)
             puts("turning right");
             idx_offset = 2*idx_offset+2;
 
-            // load_tmp, if not NONE then than move to it, else use block addr one bigger
             ret = load_idx_block(f_idx, idx_offset, (struct stored_index_block*)tmp_block);
 
             if( strcmp(tmp_block->entries[0].key, "NONE") == 0)
@@ -106,4 +106,29 @@ int find_block_for_key(FILE *f_idx, char *key)
             }
         }
     }
+}
+
+int find_entry(FILE *f_main, char *key, vgp_parkiranje *result)
+{
+    FILE *f_idx = fopen("act_test_idx.db", "r");
+    int offset = find_block_for_key(f_idx, key);
+
+    main_block block;
+    load_main_block(f_main, offset, &block);
+
+    int i;
+
+    // search inside the block
+    for( i=0; i < MAIN_BLOCKING_FACTOR; i++)
+    {
+        if( strcmp( key, block.entries[i].e_br ) == 0)
+        {
+            memcpy( result, &block.entries[i], sizeof( vgp_parkiranje ) );
+            return 1;
+        }
+    }
+
+    // search in overflow
+
+    return 0;
 }

@@ -167,3 +167,22 @@ int cli_find_key()
     fclose(f_idx);
     return 0;
 }
+
+int cli_find_entry()
+{
+    FILE *f_main = fopen("act_test_main.db", "r");
+
+    main_block block;
+
+    char key[10];
+    printf("Key to find: "); scanf("%s", key);
+
+    vgp_parkiranje res;
+
+    if(find_entry(f_main, key, &res))
+        print_vgp_entry( &res );
+    else
+        puts("Nema ga!");
+
+    fclose(f_main);
+}
