@@ -134,13 +134,14 @@ int cli_create_serial_file()
 
 int cli_print_idx()
 {
+    rewind(dbf.f_idx);
     int i = 0;
     stored_index_block *current_block = malloc( sizeof(stored_index_block) );
 
     for(i = 0; i < 31; i++)
     {
-        load_idx_block(dbf.f_main, i, (struct stored_index_block*)current_block);
-        printf("[%2d] - (%10s - %3d)\t-\t(%10s - %3d)\n", i, current_block->entries[0].key, current_block->entries[0].block_addr,
+        load_idx_block(dbf.f_idx, i, (struct stored_index_block*)current_block);
+        printf("[%2d] - (%4s - %3d)\t-\t(%4s - %3d)\n", i, current_block->entries[0].key, current_block->entries[0].block_addr,
                                                          current_block->entries[1].key, current_block->entries[1].block_addr);
     }
 
