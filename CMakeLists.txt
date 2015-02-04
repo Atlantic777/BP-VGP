@@ -27,7 +27,7 @@ add_executable(vgp src/vgp.c)
 add_executable(test-suite tests/test-suite.c)
 
 target_link_libraries(init_db db_functions bst_utils csv2ser ser2seq seq2act m)
-target_link_libraries(cli_functions utils init_db)
+target_link_libraries(cli_functions utils init_db db_functions db_file utils)
 target_link_libraries(menu cli_functions)
 target_link_libraries(vgp menu db_file init_db)
 target_link_libraries(bst_utils db_file)

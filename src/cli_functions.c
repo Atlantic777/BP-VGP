@@ -7,8 +7,12 @@
 #include "bst_utils.h"
 #include "act_utils.h"
 #include <stdlib.h>
+#include "init_db.h"
+#include "db_functions.h"
 
 #define ROOT_DIR "/tmp/"
+
+db_file dbf;
 
 int cli_exit_program()
 {
@@ -17,15 +21,14 @@ int cli_exit_program()
 
 int cli_create_new_file()
 {
+    char filename[30];
+
     puts("Kreiranje nove datoteke");
     puts("=======================");
-    printf("Naziv datoteke: "); scanf("%s", dbf->filename);
+    printf("Naziv datoteke: "); scanf("%s", filename);
 
-    strcpy(dbf->path, ROOT_DIR);
-    strcpy(dbf->path+strlen(ROOT_DIR), dbf->filename);
-
-    dbf->file = fopen(dbf->path, "w+");
-    fclose(dbf->file);
+    open_db_files( &dbf, ROOT_DIR, filename );
+    close_db_files( &dbf );
 
     return 0;
 }
@@ -71,31 +74,31 @@ int cli_create_from_data()
 
 int cli_choose_file()
 {
+    char filename[30];
+
     puts("Otvaranje datoteke");
     puts("==================");
-    printf("Naziv datoteke: "); scanf("%s", dbf->filename);
+    printf("Naziv datoteke: "); scanf("%s", filename);
 
-    strcpy(dbf->path, ROOT_DIR);
-    strcpy(dbf->path+strlen(ROOT_DIR), dbf->filename);
+    open_db_files( &dbf, ROOT_DIR, filename );
 
-    dbf->file = fopen(dbf->path, "w+");
 
     return 0;
 }
 
 int cli_show_filename()
 {
-    if(dbf->file == NULL)
+    if(dbf.f_prefix == NULL)
         puts("Nije otvorena ni jedna datoteka");
     else
-        puts(dbf->filename);
+        puts(dbf.f_prefix);
 
     return 0;
 }
 
 int cli_create_serial_file()
 {
-    if( dbf->file == NULL)
+    if( dbf.f_prefix == NULL)
     {
         puts("Nije otvorena datoteka");
         return -1;
@@ -108,6 +111,7 @@ int cli_create_serial_file()
 
         do {
             tmp = create_new_vgp_entry();
+            db_store_vgp( dbf.f_ser, &tmp );
         } while( do_next_entry() );
     }
 }
