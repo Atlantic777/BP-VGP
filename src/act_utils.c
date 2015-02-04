@@ -126,6 +126,9 @@ int find_entry(db_file *dbf, char *key, vgp_parkiranje *result)
     {
         if( strcmp( key, block.entries[i].e_br ) == 0)
         {
+            printf("Key found in block: %d\n", offset);
+            printf("It's on position:   %d\n", i);
+
             if( result != NULL )
                 memcpy( result, &block.entries[i], sizeof( vgp_parkiranje ) );
 
@@ -148,12 +151,16 @@ int find_entry(db_file *dbf, char *key, vgp_parkiranje *result)
         last_ovf_offset = block.first_overflow_offset;
         printf("fetching first overflow, key is %s\n", ovf_block.entry.e_br);
 
+        int ovf_number = 1;
+
         while( 1 )
         {
             printf("Overflow key: %s\n", ovf_block.entry.e_br);
 
             if( strcmp( key, ovf_block.entry.e_br ) == 0 )
             {
+                printf("Key found in overflow of block: %d\n", offset);
+                printf("Overflow number %d at offset %d\n", ovf_number, last_ovf_offset);
                 if( result != NULL )
                     memcpy( result, &ovf_block.entry, sizeof( vgp_parkiranje ) );
 
@@ -164,6 +171,7 @@ int find_entry(db_file *dbf, char *key, vgp_parkiranje *result)
                 if( ovf_block.next_entry_offset != -1)
                 {
                     puts("fetching next overflow");
+                    ovf_number++;
                     last_ovf_offset = ovf_block.next_entry_offset;
                     load_ovf_block( dbf->f_ovf, ovf_block.next_entry_offset, (struct overflow_block*)&ovf_block );
                 }

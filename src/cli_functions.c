@@ -140,7 +140,7 @@ int cli_print_idx()
     for(i = 0; i < 31; i++)
     {
         load_idx_block(dbf.f_main, i, (struct stored_index_block*)current_block);
-        printf("[%2d] - (%4s - %3d)\t-\t(%3s - %3d)\n", i, current_block->entries[0].key, current_block->entries[0].block_addr,
+        printf("[%2d] - (%10s - %3d)\t-\t(%10s - %3d)\n", i, current_block->entries[0].key, current_block->entries[0].block_addr,
                                                          current_block->entries[1].key, current_block->entries[1].block_addr);
     }
 
@@ -166,7 +166,7 @@ int cli_print_main()
 
         for(j = 0; j < 5; j++)
         {
-            printf("%5s", current_block.entries[j].e_br);
+            printf("%10s", current_block.entries[j].e_br);
         }
 
         printf("\n");
