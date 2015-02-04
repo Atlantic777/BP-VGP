@@ -3,6 +3,7 @@
 
 #include "vgp.h"
 #include "bst_utils.h"
+#include "db_file.h"
 
 #define MAIN_BLOCKING_FACTOR 5
 
@@ -16,8 +17,8 @@ typedef struct main_block {
 } main_block;
 
 
-int build_main_file(char *file_prefix, vgp_parkiranje *vgp_arr, int count, struct index_entry **keys);
-int build_index_file(char *file_prefix, struct index_entry *keys, int count);
+int build_main_file(db_file *dbf, vgp_parkiranje *vgp_arr, int count, struct index_entry **keys);
+int build_index_file(db_file *dbf, struct index_entry *keys, int count);
 void build_overrun_file(char *file_prefix);
 
 int load_idx_block(FILE *f_idx, int n, struct stored_index_block *result);

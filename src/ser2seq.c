@@ -4,13 +4,13 @@
 #include <stdlib.h>
 #include "db_functions.h"
 
-int ser2seq(char *filename_serial, char *filename_sequential)
+int ser2seq(db_file *dbf)
 {
-    FILE *f_seq = fopen(filename_sequential, "w");
+    FILE *f_seq = dbf->f_seq;
     int ser_count = 0;
     vgp_parkiranje *vgp_arr;
 
-    ser_count = load_ser(filename_serial, &vgp_arr);
+    ser_count = load_ser(dbf, &vgp_arr);
     vgp_sort( vgp_arr, ser_count );
 
     fwrite(&ser_count, sizeof(ser_count), 1, f_seq);
@@ -22,7 +22,7 @@ int ser2seq(char *filename_serial, char *filename_sequential)
     }
 
     free(vgp_arr);
-    fclose(f_seq);
+    fflush(f_seq);
 
     return ser_count;
 }

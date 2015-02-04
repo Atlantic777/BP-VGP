@@ -102,7 +102,10 @@ index_node* dequeue(deq_t *deq)
     index_node *ret_data = deq->head->data;
 
     if( deq->head == deq->tail)
+    {
         deq->tail = NULL;
+        deq->tail = NULL;
+    }
 
     deq->head = deq->head->next;
 

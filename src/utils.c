@@ -158,18 +158,46 @@ int compare_vgp_entries(const void* first, const void* second)
     return 0;
 }
 
-int load_ser(char *filename_serial, vgp_parkiranje **vgp_arr)
+int load_ser(db_file *dbf, vgp_parkiranje **vgp_arr)
 {
-    FILE *f_ser = fopen(filename_serial, "r");
+    FILE *f_ser = dbf->f_ser;
+
+    rewind(f_ser);
+
     int count   = 0;
     int r_count = 0;
+
+    if( f_ser == NULL )
+    {
+        puts("Failed to open SER");
+        return -1;
+    }
 
     fread(&count, sizeof(count), 1, f_ser);
     *vgp_arr = malloc( sizeof(vgp_parkiranje)*count );
 
-    while( db_read_vgp(f_ser, &((*vgp_arr)[r_count++])) && ( r_count <= count ) );
+    printf("Ser header count: %d\n", count);
+
+    while( db_read_vgp(f_ser, &((*vgp_arr)[r_count++])) && ( r_count <= count ) )
+    {
+    }
+
+    return count;
+}
+
+int load_seq(db_file *dbf, vgp_parkiranje **vgp_arr)
+{
+    FILE *f_seq = dbf->f_seq;
+    int count   = 0;
+    int r_count = 0;
+
+    rewind(f_seq);
 
 
-    fclose(f_ser);
+    fread(&count, sizeof(count), 1, f_seq);
+    *vgp_arr = malloc( sizeof(vgp_parkiranje)*count );
+
+    while( db_read_vgp(f_seq, &((*vgp_arr)[r_count++])) && ( r_count <= count ) );
+
     return count;
 }

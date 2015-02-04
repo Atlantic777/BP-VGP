@@ -67,7 +67,13 @@ int cli_create_from_data()
     puts("Kreiranje baze podataka");
     puts("=======================");
 
-    create_from_data();
+    if( strlen(dbf.f_prefix) == 0)
+    {
+        puts("Nije otvorena datoteka");
+        return -1;
+    }
+
+    create_from_data( &dbf, "data.csv");
 
     return 0;
 }
@@ -88,7 +94,7 @@ int cli_choose_file()
 
 int cli_show_filename()
 {
-    if(dbf.f_prefix == NULL)
+    if( strlen(dbf.f_prefix) == 0)
         puts("Nije otvorena ni jedna datoteka");
     else
         puts(dbf.f_prefix);
@@ -98,7 +104,7 @@ int cli_show_filename()
 
 int cli_create_serial_file()
 {
-    if( dbf.f_prefix == NULL)
+    if( strlen(dbf.f_prefix) == 0)
     {
         puts("Nije otvorena datoteka");
         return -1;
@@ -136,6 +142,13 @@ int cli_print_idx()
 int cli_print_main()
 {
     FILE *f = fopen("act_test_main.db", "r");
+
+    if(strlen(dbf.f_prefix) == 0)
+    {
+        puts("Nije otvorena datoteka");
+        return -1;
+    }
+
     main_block current_block;
 
     int i = 0;
@@ -161,6 +174,12 @@ int cli_find_key()
 {
     FILE *f_idx = fopen("act_test_idx.db", "r");
 
+    if(strlen(dbf.f_prefix) == 0)
+    {
+        puts("Nije otvorena datoteka");
+        return -1;
+    }
+
     char key[10];
 
     printf("Key to find: "); scanf("%s", key);
@@ -175,6 +194,12 @@ int cli_find_key()
 int cli_find_entry()
 {
     FILE *f_main = fopen("act_test_main.db", "r");
+
+    if(strlen(dbf.f_prefix) == 0)
+    {
+        puts("Nije otvorena datoteka");
+        return -1;
+    }
 
     main_block block;
 
@@ -196,10 +221,16 @@ int cli_store_entry()
     FILE *f_main = fopen("act_test_main.db", "r+");
     FILE *f_ovf  = fopen("act_test_ovf.db", "r+");
 
+    if(strlen(dbf.f_prefix) == 0)
+    {
+        puts("Nije otvorena datoteka");
+        return -1;
+    }
+
     vgp_parkiranje p;
     printf("Kljuc... "); scanf("%s", p.e_br );
 
-    store_entry( f_main, f_ovf, &p );
+    store_entry( dbf.f_main, f_ovf, &p );
 
     fclose(f_main);
     fclose(f_ovf);

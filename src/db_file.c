@@ -21,28 +21,27 @@ void open_db_files(db_file *dbf, char *path, char *filename)
     strcpy(tmp, fname);
     strcat(tmp, SER_F_SUFFIX);
     puts(tmp);
-    dbf->f_ser = fopen(tmp, "a+");
+    dbf->f_ser = fopen(tmp, "w+");
 
     strcpy(tmp, fname);
     strcat(tmp, SEQ_F_SUFFIX);
     puts(tmp);
-    dbf->f_seq = fopen(tmp, "a+");
+    dbf->f_seq = fopen(tmp, "w+");
 
     strcpy(tmp, fname);
     strcat(tmp, MAIN_F_SUFFIX);
     puts(tmp);
-    dbf->f_main = fopen(tmp, "a+");
+    dbf->f_main = fopen(tmp, "w+");
 
     strcpy(tmp, fname);
     strcat(tmp, IDX_F_SUFFIX);
     puts(tmp);
-    dbf->f_idx = fopen(tmp, "a+");
+    dbf->f_idx = fopen(tmp, "w+");
 
     strcpy(tmp, fname);
     strcat(tmp, OVF_F_SUFFIX);
     puts(tmp);
-    dbf->f_ovf = fopen(tmp, "a+");
-
+    dbf->f_ovf = fopen(tmp, "w+");
     strcpy(dbf->path, path);
     strcpy(dbf->f_prefix, filename);
 }

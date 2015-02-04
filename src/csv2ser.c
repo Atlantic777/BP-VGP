@@ -5,10 +5,10 @@
 #include "db_functions.h"
 #include "utils.h"
 
-int csv2ser(char *filename_csv, char *filename_serial)
+int csv2ser(char *filename_csv, db_file *dbf)
 {
     FILE *f_csv = fopen(filename_csv, "r");
-    FILE *f_ser = fopen(filename_serial, "w");
+    FILE *f_ser = dbf->f_ser;
 
     if( f_csv == NULL )
         puts("something went wrong with opening the CSV file");
@@ -38,7 +38,7 @@ int csv2ser(char *filename_csv, char *filename_serial)
     fwrite(&count, sizeof(count), 1, f_ser);
 
     fclose(f_csv);
-    fclose(f_ser);
+    fflush(f_ser);
 
     return count;
 }

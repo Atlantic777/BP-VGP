@@ -1,10 +1,9 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#define load_seq load_ser
-
 #include "vgp.h"
 #include <time.h>
+#include "db_file.h"
 
 vgp_parkiranje create_new_vgp_entry();
 void print_vgp_entry(vgp_parkiranje *);
@@ -19,6 +18,7 @@ int str_digit(char *, int);
 int do_next_entry();
 void vgp_sort(vgp_parkiranje*, int);
 int compare_vgp_entries(const void*, const void*);
-int load_ser(char *filename_ser, vgp_parkiranje **vgp_arr);
+int load_ser(db_file *dbf, vgp_parkiranje **vgp_arr);
+int load_seq(db_file *dbf, vgp_parkiranje **vgp_arr);
 
 #endif

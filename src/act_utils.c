@@ -11,8 +11,6 @@ void build_overrun_file(char *file_prefix)
     strcpy(filename, file_prefix);
     strcat(filename, "_ovf.db");
     FILE *f = fopen(filename, "w");
-
-    fclose(f);
 }
 
 int load_idx_block(FILE *f_idx, int n, struct stored_index_block *block)
@@ -154,6 +152,5 @@ int store_entry(FILE *f_main, FILE *f_ovw, vgp_parkiranje *entry)
    // or create new in overflow area
    // store it
 
-   fclose(f_idx);
 
 }

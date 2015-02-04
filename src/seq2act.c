@@ -5,15 +5,16 @@
 #include "act_utils.h"
 #include "bst_utils.h"
 
-int seq2act(char *filename_seq, char *prefix_act)
+int seq2act(db_file *dbf)
 {
     vgp_parkiranje *vgp_arr;
-    int count = load_seq(filename_seq, &vgp_arr);
+    int count = load_seq(dbf, &vgp_arr);
     index_entry *keys;
 
-    int n_blocks = build_main_file(prefix_act, vgp_arr, count, (struct index_entry**)&keys);
-    build_index_file(prefix_act, (struct index_entry*)keys, count/3);
-    build_overrun_file(prefix_act);
+    int n_blocks = build_main_file(dbf, vgp_arr, count, (struct index_entry**)&keys);
+    build_index_file(dbf, (struct index_entry*)keys, count/3);
+
+    // build_overrun_file(prefix_act);
 
     free(vgp_arr);
     free(keys);

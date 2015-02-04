@@ -1,6 +1,8 @@
 #ifndef SER2SEQ_H
 #define SER2SEQ_H
 
-int ser2seq(char *filename_serial, char *filename_sequential);
+#include "db_file.h"
+
+int ser2seq(db_file *dbf);
 
 #endif
