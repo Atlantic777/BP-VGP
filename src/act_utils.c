@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "vgp.h"
 #include "db_functions.h"
+#include "bst_utils.h"
 
 void build_overrun_file(char *file_prefix)
 {
@@ -104,10 +105,16 @@ int find_block_for_key(FILE *f_idx, char *key)
 
 int find_entry(db_file *dbf, char *key, vgp_parkiranje *result)
 {
+    rewind(dbf->f_main);
+    rewind(dbf->f_idx);
+    rewind(dbf->f_ovf);
+
     printf("searching block for %s\n", key);
     int offset = find_block_for_key(dbf->f_idx, key);
 
     main_block block;
+    overflow_block ovf_block;
+
     puts("fetching block");
     load_main_block(dbf->f_main, offset, &block);
 
@@ -130,7 +137,45 @@ int find_entry(db_file *dbf, char *key, vgp_parkiranje *result)
         }
     }
 
-    // search in overflow
+    if(i == 5 && block.n_overflows == 0 )
+    {
+        return 2;
+    }
+    else
+    {
+        int last_ovf_offset;
+        load_ovf_block( dbf->f_ovf, block.first_overflow_offset, (struct overflow_block*)&ovf_block);
+        last_ovf_offset = block.first_overflow_offset;
+        printf("fetching first overflow, key is %s\n", ovf_block.entry.e_br);
+
+        while( 1 )
+        {
+            printf("Overflow key: %s\n", ovf_block.entry.e_br);
+
+            if( strcmp( key, ovf_block.entry.e_br ) == 0 )
+            {
+                if( result != NULL )
+                    memcpy( result, &ovf_block.entry, sizeof( vgp_parkiranje ) );
+
+                return 1;
+            }
+            else
+            {
+                if( ovf_block.next_entry_offset != -1)
+                {
+                    puts("fetching next overflow");
+                    last_ovf_offset = ovf_block.next_entry_offset;
+                    load_ovf_block( dbf->f_ovf, ovf_block.next_entry_offset, (struct overflow_block*)&ovf_block );
+                }
+                else
+                {
+                    return last_ovf_offset;
+                }
+
+            }
+        }
+        return 10*last_ovf_offset;
+    }
 
     return 0;
 }
@@ -155,9 +200,74 @@ int store_entry(db_file *dbf, vgp_parkiranje *entry)
    {
        puts("key already there!");
    }
+   else if(entry_offset == 2)
+   {
+       puts("doing first overflow");
 
-   // or create new in overflow area
-   // store it
+       int last_addr;
+       last_addr = fseek(dbf->f_ovf, 0, SEEK_END);
+       last_addr /= sizeof( overflow_block );
 
+       overflow_block ovf;
+       memcpy(&ovf.entry, entry, sizeof( vgp_parkiranje ) );
+       ovf.next_entry_offset = -1;
 
+       main_block m_block;
+       load_main_block( dbf->f_main, block_offset, &m_block );
+       m_block.n_overflows++;
+       m_block.first_overflow_offset = last_addr;
+       fseek( dbf->f_main, block_offset*sizeof(main_block), SEEK_SET);
+       fwrite( &m_block, sizeof(main_block), 1, dbf->f_main);
+
+       fwrite( &ovf, sizeof(overflow_block), 1, dbf->f_ovf );
+       printf("%d\n", last_addr);
+
+       fflush(dbf->f_main);
+       fflush(dbf->f_ovf);
+   }
+   else
+   {
+       puts("doing second overflow");
+
+       int last_addr;
+       fseek(dbf->f_ovf, 0, SEEK_END);
+       last_addr = ftell(dbf->f_ovf);
+       last_addr /= sizeof( overflow_block );
+       printf("I would fetch ovf %d and store in %d.\n", entry_offset/10, last_addr);
+
+       overflow_block ovf;
+
+       // store new entry
+       memcpy(&ovf.entry, entry, sizeof( vgp_parkiranje ) );
+       ovf.next_entry_offset = -1;
+       fwrite( &ovf, sizeof(overflow_block), 1, dbf->f_ovf );
+
+       // get prev entry
+       load_ovf_block(dbf->f_ovf, entry_offset/10, (struct overflow_block*)&ovf);
+       ovf.next_entry_offset = last_addr;
+       fseek(dbf->f_ovf, (entry_offset/10)*sizeof(overflow_block), SEEK_SET);
+       fwrite( &ovf, sizeof(overflow_block), 1, dbf->f_ovf );
+
+       main_block m_block;
+       load_main_block( dbf->f_main, block_offset, &m_block );
+       m_block.n_overflows++;
+       fseek( dbf->f_main, block_offset*sizeof(main_block), SEEK_SET);
+       fwrite( &m_block, sizeof(main_block), 1, dbf->f_main);
+
+       fflush(dbf->f_main);
+       fflush(dbf->f_ovf);
+
+       // get last overflow
+       // move one next
+       // store
+   }
+}
+
+int load_ovf_block(FILE *f_ovf, int n, struct overflow_block *result)
+{
+    rewind(f_ovf);
+
+    fseek(f_ovf, n*sizeof( overflow_block ), SEEK_SET);
+
+    return fread( result, sizeof(overflow_block), 1, f_ovf);
 }

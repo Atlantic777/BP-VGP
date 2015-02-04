@@ -156,7 +156,7 @@ int cli_print_main()
 
     while( load_main_block( dbf.f_main, i, &current_block) )
     {
-        printf("%3d *** ", i);
+        printf("%3d *** [%3d] *  ", i, current_block.n_overflows);
 
         for(j = 0; j < 5; j++)
         {
@@ -203,10 +203,11 @@ int cli_find_entry()
     printf("Key to find: "); scanf("%s", key);
 
     vgp_parkiranje res;
+    int resp = find_entry(&dbf, key, &res);
 
-    if(find_entry(&dbf, key, &res))
+    if( resp == 1)
         print_vgp_entry( &res );
-    else
+    else if(resp == 0)
         puts("Nema ga!");
 }
 

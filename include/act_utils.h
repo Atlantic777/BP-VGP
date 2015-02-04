@@ -9,6 +9,7 @@
 
 struct index_entry;
 struct stored_index_block;
+struct overflow_block;
 
 typedef struct main_block {
     vgp_parkiranje entries[MAIN_BLOCKING_FACTOR];
@@ -23,6 +24,7 @@ void build_overrun_file(char *file_prefix);
 
 int load_idx_block(FILE *f_idx, int n, struct stored_index_block *result);
 int load_main_block(FILE *f_main, int n, main_block *result);
+int load_ovf_block(FILE *f_ovf, int n, struct overflow_block *result);
 int find_block_for_key(FILE *f_idx, char *key);
 int find_entry(db_file *dbf, char *key, vgp_parkiranje *result);
 int store_entry(db_file *dbf, vgp_parkiranje *entry);
