@@ -152,3 +152,18 @@ int cli_print_main()
 
     fclose(f);
 }
+
+int cli_find_key()
+{
+    FILE *f_idx = fopen("act_test_idx.db", "r");
+
+    char key[10];
+
+    printf("Key to find: "); scanf("%s", key);
+
+    int r = find_block_for_key(f_idx, key);
+    printf("Matching block %d\n", r);
+
+    fclose(f_idx);
+    return 0;
+}

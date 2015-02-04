@@ -26,6 +26,8 @@ void init_menu()
             "Kreiraj serijsku datoteku.",
             "Kreiraj bazu iz podataka.",
             "Prikazi main",
+            "Prikazi index",
+            "Pronadji kljuc",
         };
 
     void *menu_item_functions[NUM_MENU_ITEMS] = {
@@ -36,6 +38,8 @@ void init_menu()
             cli_create_serial_file,
             cli_create_from_data,
             cli_print_main,
+            cli_print_idx,
+            cli_find_key,
         };
 
     int i;

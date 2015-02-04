@@ -9,5 +9,6 @@ int cli_create_serial_file();
 int cli_create_from_data();
 int cli_print_idx();
 int cli_print_main();
+int cli_find_key();
 
 #endif
