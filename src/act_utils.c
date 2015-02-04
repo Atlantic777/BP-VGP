@@ -137,12 +137,12 @@ int find_entry(FILE *f_main, char *key, vgp_parkiranje *result)
     return 0;
 }
 
-int store_entry(FILE *f_main, FILE *f_ovw, vgp_parkiranje *entry)
+int store_entry(db_file *dbf, vgp_parkiranje *entry)
 {
    FILE *f_idx = fopen("act_test_idx.db", "r");
    int i;
 
-   int entry_offset = find_entry(f_main, entry->e_br, NULL);
+   int entry_offset = find_entry(dbf->f_main, entry->e_br, NULL);
 
    if(entry_offset < 0)
        printf("Empty offset is: %d\n", -entry_offset);

@@ -120,6 +120,7 @@ int cli_create_serial_file()
             db_store_vgp( dbf.f_ser, &tmp );
         } while( do_next_entry() );
     }
+    fflush(dbf.f_ser);
 }
 
 int cli_print_idx()
@@ -227,10 +228,9 @@ int cli_store_entry()
         return -1;
     }
 
-    vgp_parkiranje p;
-    printf("Kljuc... "); scanf("%s", p.e_br );
+    vgp_parkiranje p = create_new_vgp_entry();
 
-    store_entry( dbf.f_main, f_ovf, &p );
+    store_entry( &dbf, &p );
 
     fclose(f_main);
     fclose(f_ovf);
