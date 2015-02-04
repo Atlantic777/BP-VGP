@@ -24,7 +24,7 @@ int load_idx_block(FILE *f_idx, int n, struct stored_index_block *result);
 int load_main_block(FILE *f_main, int n, main_block *result);
 int find_block_for_key(FILE *f_idx, char *key);
 int find_entry(FILE *f_main, char *key, vgp_parkiranje *result);
-int store_key(FILE *f_main, vgp_parkiranje *entry);
+int store_entry(FILE *f_main, FILE *f_ovf, vgp_parkiranje *entry);
 int reorganize_db(char *file_prefix);
 
 // print idx_block

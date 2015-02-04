@@ -29,6 +29,7 @@ void init_menu()
             "Prikazi index",
             "Pronadji kljuc",
             "Pronadji zapis",
+            "Dodaj zapis",
         };
 
     void *menu_item_functions[NUM_MENU_ITEMS] = {
@@ -42,6 +43,7 @@ void init_menu()
             cli_print_idx,
             cli_find_key,
             cli_find_entry,
+            cli_store_entry,
         };
 
     int i;

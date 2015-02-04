@@ -30,7 +30,7 @@ int load_main_block(FILE *f_main, int n, main_block *block)
 {
     if( fseek(f_main, n*sizeof(main_block), SEEK_SET) )
     {
-        perror("Load idx block: ");
+        perror("Load main block: ");
         return -1;
     }
 
@@ -123,12 +123,37 @@ int find_entry(FILE *f_main, char *key, vgp_parkiranje *result)
     {
         if( strcmp( key, block.entries[i].e_br ) == 0)
         {
-            memcpy( result, &block.entries[i], sizeof( vgp_parkiranje ) );
+            if( result != NULL )
+                memcpy( result, &block.entries[i], sizeof( vgp_parkiranje ) );
+
             return 1;
+        }
+        else if( strlen(block.entries[i].e_br) == 0 )
+        {
+            return -i;
         }
     }
 
     // search in overflow
 
     return 0;
+}
+
+int store_entry(FILE *f_main, FILE *f_ovw, vgp_parkiranje *entry)
+{
+   FILE *f_idx = fopen("act_test_idx.db", "r");
+   int i;
+
+   int entry_offset = find_entry(f_main, entry->e_br, NULL);
+
+   if(entry_offset < 0)
+       printf("Empty offset is: %d\n", -entry_offset);
+   else if(entry_offset == 1)
+       puts("key already there!");
+
+   // or create new in overflow area
+   // store it
+
+   fclose(f_idx);
+
 }

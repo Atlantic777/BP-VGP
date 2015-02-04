@@ -11,5 +11,6 @@ int cli_print_idx();
 int cli_print_main();
 int cli_find_key();
 int cli_find_entry();
+int cli_store_entry();
 
 #endif

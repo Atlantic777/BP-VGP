@@ -186,3 +186,18 @@ int cli_find_entry()
 
     fclose(f_main);
 }
+
+int cli_store_entry()
+{
+    FILE *f_main = fopen("act_test_main.db", "r+");
+    FILE *f_ovf  = fopen("act_test_ovf.db", "r+");
+
+    vgp_parkiranje p;
+    printf("Kljuc... "); scanf("%s", p.e_br );
+
+    store_entry( f_main, f_ovf, &p );
+
+    fclose(f_main);
+    fclose(f_ovf);
+    return 0;
+}
